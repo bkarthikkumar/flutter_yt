@@ -26,6 +26,7 @@ class Home extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 2.0),
                   child: CircleAvatar(
                     radius: 50,
+                    backgroundImage: AssetImage("asset/images/profile_001.jpg"),
                     backgroundColor: Colors.yellowAccent,
                   ),
                 ),
@@ -71,7 +72,11 @@ class Home extends StatelessWidget {
                         ),
                         Text(
                           "Education Details",
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "DancingScript",
+                          ),
                         )
                       ],
                     ),
@@ -131,7 +136,7 @@ class Home extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 5),
                     child: Row(
                       children: [
                         Icon(
@@ -151,6 +156,9 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(
+              height: 25,
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Column(
@@ -159,8 +167,16 @@ class Home extends StatelessWidget {
                     "About Me",
                     style: TextStyle(fontSize: 30),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,"),
+                  )
                 ],
               ),
+            ),
+            SizedBox(
+              height: 15,
             ),
             Column(
               children: [
