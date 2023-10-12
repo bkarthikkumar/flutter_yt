@@ -12,9 +12,18 @@ class _MausamHomeState extends State<MausamHome> {
   the below function is called when the widget is initlized like when we are coming back to 
   home page from any other page
   */
+
+  void dummyTimer() {
+    Future.delayed(Duration(seconds: 5), () {
+      print("Future function is called after 5 sect");
+    });
+    print("DummyTimerFunction");
+  }
+
   @override
   void initState() {
     super.initState();
+    dummyTimer();
     print("This is the init state for mausam home screen");
   }
 
