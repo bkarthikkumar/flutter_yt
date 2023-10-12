@@ -8,26 +8,45 @@ class MausamHome extends StatefulWidget {
 }
 
 class _MausamHomeState extends State<MausamHome> {
-  /* 
-  the below function is called when the widget is initlized like when we are coming back to 
-  home page from any other page
-  */
+  int counter = 1;
+  String username = '';
+  // void dummyTimer() {
+  //   Future.delayed(Duration(seconds: 5), () {
+  //     print("Future function is called after 5 sect");
+  //   });
+  //   print("DummyTimerFunction");
+  // }
 
-  void dummyTimer() {
-    Future.delayed(Duration(seconds: 5), () {
+// in new version the async fucntion and the return type of the function is void then
+// we have to use as shown below Future<void> functionName() async(){}
+  Future<void> dummyTimer() async {
+    await Future.delayed(Duration(seconds: 5), () {
       print("Future function is called after 5 sect");
+      username = 'Balasundaram Karthik Kumar';
     });
     print("DummyTimerFunction");
   }
 
+  void getUserName() async {
+    await dummyTimer();
+    print('The user name is $username');
+  }
+
+  /* 
+  the below function is called when the widget is initlized like when we are coming back to 
+  home page from any other page
+  */
   @override
   void initState() {
     super.initState();
-    dummyTimer();
+    getUserName();
     print("This is the init state for mausam home screen");
   }
 
-  int counter = 1;
+  /* 
+  the below function is called when the widget is updated on a button click or some event like that
+  hovering etc
+  */
   @override
   void setState(VoidCallback fn) {
     // TODO: implement setState
@@ -36,6 +55,12 @@ class _MausamHomeState extends State<MausamHome> {
     print("$counter");
   }
 
+  /* 
+  the below function is called when the widget is destroyed or disposed like when we are goin back to 
+  some other pages or some other section .
+  This method is always calle in the backend by default, we can override as shown below
+  
+  */
   @override
   void dispose() {
     // TODO: implement dispose
