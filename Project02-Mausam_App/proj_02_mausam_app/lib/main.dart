@@ -5,6 +5,10 @@ import 'package:proj_02_mausam_app/Screens/location_screen.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: MausamHome(),
+    routes: {
+      "/": (context) => MausamLoading(),
+      "/home": (context) => MausamHome(),
+      'select-location': (context) => MausamLocations(),
+    },
   ));
 }
