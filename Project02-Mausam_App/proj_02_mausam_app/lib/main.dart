@@ -12,3 +12,8 @@ void main() {
     },
   ));
 }
+
+
+// neukunoillani-3403@yopmail.com
+// RRZ.*?aN9b)!Byd
+// https://home.openweathermap.org/users/sign_up

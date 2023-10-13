@@ -13,6 +13,38 @@ class MausamHome extends StatefulWidget {
 class _MausamHomeState extends State<MausamHome> {
   int counter = 1;
   String username = '';
+  String extraURLaddiotions = '';
+  String URLadditions = '';
+  String weatherAPIurl = 'https://api.openweathermap.org/data/2.5/';
+  Map apikeys = {
+    'default': "a4e2837340e48848376046081baa0193",
+    'current': 'f41876d95649c742f2d05ec20a48264f',
+    'forecast5': 'c12ef342000a353dfac8ffdd06d0546a',
+    'weathermaps': '826f03b87b852612f6473385f6b2b9b9',
+    'air-pollution': '6c4d30ec18f9f67811a99d1bbaf89e4f',
+    'geocoding-api': '1a571ec1d115177b65ef8c6b448b60cd',
+  };
+
+  Map urlKeyWords = {
+    'current': 'weather',
+    'forecast5': 'forecast',
+    'air-pollution': 'air_pollution',
+  };
+
+  /// https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+  /// https://api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
+  /// http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={API key}
+  /// http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+
+  /// https://openweathermap.org/weathermap?basemap=map&cities=false&layer=temperature&lat=28.6496&lon=77.2421&zoom=10
+  ///
+  /// https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=28.6496&lon=77.2421&zoom=10
+  /// https://openweathermap.org/weathermap?basemap=map&cities=true&layer=pressure&lat=28.6496&lon=77.2421&zoom=10
+  /// https://openweathermap.org/weathermap?basemap=map&cities=true&layer=windspeed&lat=28.6496&lon=77.2421&zoom=10
+  /// https://openweathermap.org/weathermap?basemap=map&cities=true&layer=clouds&lat=28.6496&lon=77.2421&zoom=10
+  /// https://openweathermap.org/weathermap?basemap=map&cities=true&layer=radar&lat=28.6496&lon=77.2421&zoom=3
+  ///
+
   // void dummyTimer() {
   //   Future.delayed(Duration(seconds: 5), () {
   //     print("Future function is called after 5 sect");
@@ -43,6 +75,27 @@ class _MausamHomeState extends State<MausamHome> {
     await dummyTimer();
     print('The user name is $username');
   }
+/**
+ * Below code will is for the weather api and its data
+ */
+
+  void _getLati_Long() async {}
+
+  void getWeatherData() async {
+    URLadditions = 'current';
+    // weather?q={city name}&appid={API key}
+    extraURLaddiotions = urlKeyWords[URLadditions] +
+        '?q=Delhi,In&appid=' +
+        apikeys[URLadditions];
+    String weatherURL = weatherAPIurl + extraURLaddiotions;
+    Response weatherApiResponse = await get(Uri.parse(weatherURL));
+    Map completeData = jsonDecode(weatherApiResponse.body);
+    Map mainTemp = completeData['main'];
+    print(completeData);
+    List weatherData = completeData['weather'];
+    Map completeWeatherData = weatherData[0];
+    print(completeWeatherData['main']);
+  }
 
   /* 
   the below function is called when the widget is initlized like when we are coming back to 
@@ -53,7 +106,8 @@ class _MausamHomeState extends State<MausamHome> {
     super.initState();
     getUserName();
     print("This is the init state for mausam home screen");
-    getApiData();
+    // getApiData();
+    getWeatherData();
   }
 
   /* 
