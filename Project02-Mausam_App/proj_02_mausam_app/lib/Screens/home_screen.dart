@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class MausamHome extends StatefulWidget {
   const MausamHome({super.key});
@@ -27,6 +30,15 @@ class _MausamHomeState extends State<MausamHome> {
     print("DummyTimerFunction");
   }
 
+  void getApiData() async {
+    Response apiResponse =
+        await get(Uri.parse("https://dummyjson.com/products/1"));
+    print(apiResponse.body);
+    Map mappedData = jsonDecode(apiResponse.body);
+    print(mappedData['description']);
+    // in the above line body of the response is given and printed while feteching the data from the api url takes it own time
+  }
+
   void getUserName() async {
     await dummyTimer();
     print('The user name is $username');
@@ -41,6 +53,7 @@ class _MausamHomeState extends State<MausamHome> {
     super.initState();
     getUserName();
     print("This is the init state for mausam home screen");
+    getApiData();
   }
 
   /* 
