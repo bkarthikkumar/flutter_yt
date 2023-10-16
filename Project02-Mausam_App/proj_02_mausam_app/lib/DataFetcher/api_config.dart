@@ -20,6 +20,8 @@ class ApiData {
   String? windSpeed;
   String? windDeg;
   String? cloudStatus;
+  String? todayDate;
+  Map<dynamic, dynamic> customWeatherData = {};
   String weatherAPIurl = 'https://api.openweathermap.org/data/2.5/';
   Map apikeys = {
     'default': "a4e2837340e48848376046081baa0193",
@@ -48,7 +50,8 @@ class ApiData {
     urlAdditions = typeOfData;
     extraURLaddiotions = urlKeyWords[urlAdditions] +
         '?q=$location&appid=' +
-        apikeys[urlAdditions];
+        apikeys[urlAdditions] +
+        '&units=metric';
 
     fullUrl = weatherAPIurl + extraURLaddiotions;
     return fullUrl;
@@ -86,6 +89,24 @@ class ApiData {
       windSpeed = completeData['wind']['speed'].toString();
       windDeg = completeData['wind']['deg'].toString();
       cloudStatus = completeData['clouds']['all'].toString();
+
+      todayDate = completeData['dt'].toString();
+
+      // Below map is used to send all the data
+      customWeatherData.addAll({
+        'weather': weather,
+        'weatherDesc': weatherDesc,
+        'temp': temp,
+        'feelsLike': feelsLike,
+        'pressure': pressure,
+        'humidity': humidity,
+        'sunRise': sunRise,
+        'sunSet': sunSet,
+        'windSpeed': windSpeed,
+        'windDeg': windDeg,
+        'cloudStatus': cloudStatus,
+        'currentDate': todayDate,
+      });
     } catch (e) {
       print("Got a Error $e");
     }

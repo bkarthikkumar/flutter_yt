@@ -9,12 +9,6 @@ class MausamHome extends StatefulWidget {
 }
 
 class _MausamHomeState extends State<MausamHome> {
-  void initWeatherApp() async {
-    ApiData appData = ApiData(location: 'Delhi,In', typeOfData: 'current');
-    await appData.getWeatherData();
-    print(appData.windSpeed);
-  }
-
   /* 
   the below function is called when the widget is initlized like when we are coming back to 
   home page from any other page
@@ -23,7 +17,6 @@ class _MausamHomeState extends State<MausamHome> {
   void initState() {
     super.initState();
     print("This is the init state for mausam home screen");
-    initWeatherApp();
   }
 
   /* 
@@ -51,6 +44,7 @@ class _MausamHomeState extends State<MausamHome> {
 
   @override
   Widget build(BuildContext context) {
+    Map dataRecived = ModalRoute.of(context)!.settings.arguments as Map;
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -72,7 +66,9 @@ class _MausamHomeState extends State<MausamHome> {
           ),
           TextButton(
             onPressed: () => setState(
-              () {},
+              () {
+                print(dataRecived);
+              },
             ),
             child: Text("Click me!!"),
           )
