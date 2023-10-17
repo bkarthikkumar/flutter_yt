@@ -35,7 +35,7 @@ class _MausamLoadingState extends State<MausamLoading> {
   @override
   void initState() {
     super.initState();
-    // initWeatherApp();
+    initWeatherApp();
   }
 
   @override

@@ -21,6 +21,8 @@ class ApiData {
   String? windDeg;
   String? cloudStatus;
   String? todayDate;
+  String? weatherICon;
+  String? searchedLocation;
   Map<dynamic, dynamic> customWeatherData = {};
   String weatherAPIurl = 'https://api.openweathermap.org/data/2.5/';
   Map apikeys = {
@@ -73,6 +75,7 @@ class ApiData {
       Map completeWeatherData = weatherData[0];
       weather = completeWeatherData['main'];
       weatherDesc = completeWeatherData['description'];
+      weatherICon = completeWeatherData['icon'];
 
       // temp and feels like and pressure and humidity
       Map mainData = completeData['main'];
@@ -84,6 +87,10 @@ class ApiData {
       //sunrise and sunset
       sunRise = completeData['sys']['sunrise'].toString();
       sunSet = completeData['sys']['sunset'].toString();
+
+      searchedLocation = completeData['name'] +
+          "," +
+          completeData['sys']['country'].toString();
 
       // windDetails
       windSpeed = completeData['wind']['speed'].toString();
@@ -106,6 +113,8 @@ class ApiData {
         'windDeg': windDeg,
         'cloudStatus': cloudStatus,
         'currentDate': todayDate,
+        'weatherICon': weatherICon,
+        'searchedLocation': searchedLocation,
       });
     } catch (e) {
       print("Got a Error $e");
