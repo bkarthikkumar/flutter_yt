@@ -5,6 +5,7 @@ class ApiData {
   ///  {coord: {lon: 77.2167, lat: 28.6667}, weather: [{id: 721, main: Haze, description: haze, icon: 50d}], base: stations, main: {temp: 308.2, feels_like: 306.8, temp_min: 308.2, temp_max: 308.2, pressure: 1012, humidity: 24}, visibility: 3500, wind: {speed: 4.12, deg: 300}, clouds: {all: 0}, dt: 1697192376, sys: {type: 1, id: 9165, country: IN, sunrise: 1697158212, sunset: 1697199871}, timezone: 19800, id: 1273294, name: Delhi, cod: 200}
 
   String? typeOfData;
+  String? apiResponseMessage;
   String? lat;
   String? lon;
   String? location;
@@ -67,55 +68,79 @@ class ApiData {
       // Lat and lon of the Location
 
       Map completeData = jsonDecode(weatherApiResponse.body);
-      lat = completeData['coord']['lat'].toString();
-      lon = completeData['coord']['lon'].toString();
+      if (completeData['cod'] != 200) {
+        apiResponseMessage = completeData['message'];
+        customWeatherData.addAll({
+          'apiResponseMessage': apiResponseMessage,
+          'weather': "Not Found",
+          'weatherDesc': "Not Found",
+          'temp': "Not Found",
+          'feelsLike': "Not Found",
+          'pressure': "Not Found",
+          'humidity': "Not Found",
+          'sunRise': "Not Found",
+          'sunSet': "Not Found",
+          'windSpeed': "Not Found",
+          'windDeg': "Not Found",
+          'cloudStatus': "Not Found",
+          'currentDate': "Not Found",
+          'weatherICon': "Not Found",
+          'searchedLocation': "Not Found",
+        });
+      } else {
+        print(completeData);
+        lat = completeData['coord']['lat'].toString();
+        lon = completeData['coord']['lon'].toString();
+        apiResponseMessage = '';
 
-      // weather and its desc
-      List weatherData = completeData['weather'];
-      Map completeWeatherData = weatherData[0];
-      weather = completeWeatherData['main'];
-      weatherDesc = completeWeatherData['description'];
-      weatherICon = completeWeatherData['icon'];
+        // weather and its desc
+        List weatherData = completeData['weather'];
+        Map completeWeatherData = weatherData[0];
+        weather = completeWeatherData['main'];
+        weatherDesc = completeWeatherData['description'];
+        weatherICon = completeWeatherData['icon'];
 
-      // temp and feels like and pressure and humidity
-      Map mainData = completeData['main'];
-      temp = mainData['temp'].toString();
-      feelsLike = mainData['feels_like'].toString();
-      pressure = mainData['pressure'].toString();
-      humidity = mainData['humidity'].toString();
+        // temp and feels like and pressure and humidity
+        Map mainData = completeData['main'];
+        temp = mainData['temp'].toString();
+        feelsLike = mainData['feels_like'].toString();
+        pressure = mainData['pressure'].toString();
+        humidity = mainData['humidity'].toString();
 
-      //sunrise and sunset
-      sunRise = completeData['sys']['sunrise'].toString();
-      sunSet = completeData['sys']['sunset'].toString();
+        //sunrise and sunset
+        sunRise = completeData['sys']['sunrise'].toString();
+        sunSet = completeData['sys']['sunset'].toString();
 
-      searchedLocation = completeData['name'] +
-          "," +
-          completeData['sys']['country'].toString();
+        searchedLocation = completeData['name'] +
+            "," +
+            completeData['sys']['country'].toString();
 
-      // windDetails
-      windSpeed = completeData['wind']['speed'].toString();
-      windDeg = completeData['wind']['deg'].toString();
-      cloudStatus = completeData['clouds']['all'].toString();
+        // windDetails
+        windSpeed = completeData['wind']['speed'].toString();
+        windDeg = completeData['wind']['deg'].toString();
+        cloudStatus = completeData['clouds']['all'].toString();
 
-      todayDate = completeData['dt'].toString();
+        todayDate = completeData['dt'].toString();
 
-      // Below map is used to send all the data
-      customWeatherData.addAll({
-        'weather': weather,
-        'weatherDesc': weatherDesc,
-        'temp': temp,
-        'feelsLike': feelsLike,
-        'pressure': pressure,
-        'humidity': humidity,
-        'sunRise': sunRise,
-        'sunSet': sunSet,
-        'windSpeed': windSpeed,
-        'windDeg': windDeg,
-        'cloudStatus': cloudStatus,
-        'currentDate': todayDate,
-        'weatherICon': weatherICon,
-        'searchedLocation': searchedLocation,
-      });
+        // Below map is used to send all the data
+        customWeatherData.addAll({
+          'apiResponseMessage': apiResponseMessage,
+          'weather': weather,
+          'weatherDesc': weatherDesc,
+          'temp': temp,
+          'feelsLike': feelsLike,
+          'pressure': pressure,
+          'humidity': humidity,
+          'sunRise': sunRise,
+          'sunSet': sunSet,
+          'windSpeed': windSpeed,
+          'windDeg': windDeg,
+          'cloudStatus': cloudStatus,
+          'currentDate': todayDate,
+          'weatherICon': weatherICon,
+          'searchedLocation': searchedLocation,
+        });
+      }
     } catch (e) {
       print("Got a Error $e");
     }

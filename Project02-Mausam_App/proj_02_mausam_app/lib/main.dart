@@ -8,8 +8,10 @@ void main() {
     debugShowCheckedModeBanner: false,
     routes: {
       "/": (context) => MausamLoading(),
+      // "/": (context) => MausamLocations(),
       "/home": (context) => MausamHome(),
-      'select-location': (context) => MausamLocations(),
+      '/select-location': (context) => MausamLocations(),
+      '/loading-location-data': (context) => MausamLoading(),
     },
   ));
 }

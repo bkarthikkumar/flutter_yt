@@ -10,10 +10,12 @@ class MausamLoading extends StatefulWidget {
 }
 
 class _MausamLoadingState extends State<MausamLoading> {
+  String _golocation = 'Delhi,In';
   String temp = "Please Wait while we fetching the data";
   Map apiDataToBeSent = {};
-  void initWeatherApp() async {
-    ApiData appData = ApiData(location: 'Delhi,In', typeOfData: 'current');
+  void initWeatherApp(String _golocation) async {
+    print(_golocation);
+    ApiData appData = ApiData(location: _golocation, typeOfData: 'current');
     await appData.getWeatherData();
     // print(appData.customWeatherData);
     apiDataToBeSent.addAll(appData.customWeatherData);
@@ -35,11 +37,18 @@ class _MausamLoadingState extends State<MausamLoading> {
   @override
   void initState() {
     super.initState();
-    initWeatherApp();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Map searchLocation = ModalRoute.of(context)!.settings.arguments as Map;
+    Map? searchLocation = ModalRoute.of(context)?.settings.arguments as Map?;
+
+    if (searchLocation?.isNotEmpty ?? false) {
+      _golocation = searchLocation!['searchField'];
+      print(_golocation);
+    }
+    initWeatherApp(_golocation);
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -48,42 +57,44 @@ class _MausamLoadingState extends State<MausamLoading> {
           ),
         ),
       ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Welcome to Mausam App",
-                style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                    color: Colors.black,
-                    decoration: TextDecoration.underline,
-                    fontFamily: "HomemadeApple"),
-              ),
-              Image.asset('assets/images/logo.png'),
-              SpinKitWaveSpinner(
-                color: Colors.white,
-                size: 50.0,
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Center(
-                child: Text(
-                  "Crafted by \n Balasundaram Karthik Kumar",
-                  textAlign: TextAlign.center,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Welcome to Mausam App",
                   style: TextStyle(
-                    fontFamily: 'Satisfy',
-                    fontSize: 30,
-                    color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 20,
+                      color: Colors.black,
+                      decoration: TextDecoration.underline,
+                      fontFamily: "HomemadeApple"),
+                ),
+                Image.asset('assets/images/logo.png'),
+                SpinKitWaveSpinner(
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Center(
+                  child: Text(
+                    "Crafted by \n Balasundaram Karthik Kumar",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Satisfy',
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
