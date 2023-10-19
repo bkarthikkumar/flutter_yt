@@ -37,7 +37,7 @@ class _FoodRecipeHomeState extends State<FoodRecipeHome> {
 
     appFoodRecipeList.forEach((dataRecipe) {
       print(dataRecipe.appLabel);
-      print(dataRecipe.appIngredientList);
+      // print(dataRecipe.appIngredientList);
     });
   }
 
@@ -144,14 +144,7 @@ class _FoodRecipeHomeState extends State<FoodRecipeHome> {
                     ),
                   ),
                   Container(
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 150,
-                      itemBuilder: (context, index) {
-                        return Text("Hello index $index");
-                      },
-                    ),
+                    child: recipeListData(appFoodRecipeList),
                   ),
                 ],
               ),
@@ -161,4 +154,123 @@ class _FoodRecipeHomeState extends State<FoodRecipeHome> {
       ),
     );
   }
+}
+
+Widget recipeListData(passedApiList) {
+  return ListView.builder(
+    physics: NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: passedApiList.length,
+    itemBuilder: ((context, index) {
+      return InkWell(
+        onTap: () {},
+        child: Card(
+          margin: EdgeInsets.all(20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+          elevation: 5.0,
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: Image.network(
+                  passedApiList[index].appImage,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 250,
+                ),
+              ),
+              Positioned(
+                bottom: 15,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 25,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.6),
+                  ),
+                  child: Text(
+                    passedApiList[index].appLabel,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 5,
+                top: 5,
+                height: 50,
+                width: 120,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25),
+                    ),
+                    color: Colors.black.withOpacity(0.7),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.local_fire_department,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        passedApiList[index].appCalories,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 5,
+                top: 5,
+                height: 50,
+                width: 125,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
+                    ),
+                    color: Colors.black.withOpacity(0.7),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.punch_clock,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        '${passedApiList[index].appTotalTime} min',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }),
+  );
 }

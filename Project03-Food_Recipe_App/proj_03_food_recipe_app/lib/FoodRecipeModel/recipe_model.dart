@@ -29,7 +29,7 @@ class FoodRecipeModel {
       appLabel: foodRecipe['label'],
       appImage: foodRecipe['image'],
       appSource: foodRecipe['source'],
-      appCalories: foodRecipe['calories'].toString(),
+      appCalories: foodRecipe['calories'].toStringAsFixed(2),
       appSourceUrl: foodRecipe['url'],
       appIngredientList: foodRecipe['ingredientLines'],
       appDietLabels: foodRecipe['dietLabels'],
