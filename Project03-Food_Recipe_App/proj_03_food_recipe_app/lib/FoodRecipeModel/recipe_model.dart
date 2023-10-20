@@ -25,6 +25,11 @@ class FoodRecipeModel {
     this.appIngredients,
   });
   factory FoodRecipeModel.fromMap(Map foodRecipe) {
+    if (foodRecipe['url'].toString().contains("http://")) {
+      foodRecipe['url'] =
+          foodRecipe['url'].toString().replaceAll("http://", "https://");
+    }
+
     return FoodRecipeModel(
       appLabel: foodRecipe['label'],
       appImage: foodRecipe['image'],

@@ -1,62 +1,29 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:proj_03_food_recipe_app/AppScreens/fr_search_recipe.dart';
+import 'package:proj_03_food_recipe_app/AppScreens/fr_recipe_view.dart';
 import 'package:proj_03_food_recipe_app/FoodRecipeModel/recipe_model.dart';
 
-import 'package:proj_03_food_recipe_app/AppScreens/fr_recipe_view.dart';
-
-class FoodRecipeHome extends StatefulWidget {
-  const FoodRecipeHome({super.key});
+class SearchFoodRecipe extends StatefulWidget {
+  // const SearchFoodRecipe({super.key});
+  late String searchQuery;
+  SearchFoodRecipe(this.searchQuery);
 
   @override
-  State<FoodRecipeHome> createState() => _FoodRecipeHomeState();
+  State<SearchFoodRecipe> createState() => _SearchFoodRecipeState();
 }
 
-class _FoodRecipeHomeState extends State<FoodRecipeHome> {
+class _SearchFoodRecipeState extends State<SearchFoodRecipe> {
   bool isDataLoading = true;
-
-  String appId = '639ee0b3';
-  String appKey = 'f11f737334c5708abca4f04a6acb1e79';
-  String appUrl = '';
-// 'https://api.edamam.com/api/recipes/v2?type=public&q=rajma&app_id=639ee0b3&app_key=f11f737334c5708abca4f04a6acb1e79';
 
   TextEditingController foodSearchTextController = new TextEditingController();
   List<FoodRecipeModel> appFoodRecipeList = <FoodRecipeModel>[];
-  List reciptCatList = [
-    {
-      "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
-      "heading": "Vegetarian and vegan",
-      "value": "vegetarians",
-    },
-    {
-      "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
-      "heading": "Non-Vegetarian",
-      "value": 'non-vegetarian',
-    },
-    {
-      "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
-      "heading": "Snacks",
-      "value": 'snacks'
-    },
-    {
-      "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
-      "heading": "Street Food",
-      "value": 'street food',
-    }
-  ];
 
-  var randomFoodsFrHomePage = [
-    'indian',
-    'mexican',
-    'pasta',
-    'south-indian',
-    'rajasthani',
-    'indian-street-food',
-  ];
 // get recipe data from api
+  String appId = '639ee0b3';
+  String appKey = 'f11f737334c5708abca4f04a6acb1e79';
+  String appUrl = '';
 
   getFoodRecipe(foodQuery) async {
     appUrl =
@@ -71,37 +38,25 @@ class _FoodRecipeHomeState extends State<FoodRecipeHome> {
       appFoodRecipeList.add(foodApi_recipeModel);
       setState(() {
         isDataLoading = false;
-        print(isDataLoading);
       });
     });
-    print(isDataLoading);
+
     // appFoodRecipeList.forEach((dataRecipe) {
     //   print(dataRecipe.appLabel);
     //   // print(dataRecipe.appIngredientList);
     // });
   }
 
-  randomHomePageFood() {
-    final _random = new Random();
-    var homeFood =
-        randomFoodsFrHomePage[_random.nextInt(randomFoodsFrHomePage.length)];
-    return homeFood;
-  }
-
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    getFoodRecipe(randomHomePageFood());
+    getFoodRecipe(widget.searchQuery);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     "Zyaka-Food Recipe",
-      //   ),
-      // ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -162,8 +117,7 @@ class _FoodRecipeHomeState extends State<FoodRecipeHome> {
                                 (foodSearchTextController.text)
                                     .replaceAll(" ", "");
                               } else {
-                                // getFoodRecipe(foodSearchTextController.text);
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => SearchFoodRecipe(
@@ -178,52 +132,10 @@ class _FoodRecipeHomeState extends State<FoodRecipeHome> {
                       ],
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "What do you want to try today?",
-                          style: TextStyle(
-                            fontSize: 30.5,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 100,
-                          child: recipeCategory(reciptCatList),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Let's Cook Something New!",
-                              style: TextStyle(
-                                fontSize: 25,
-                                color: Colors.black,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  getFoodRecipe(randomHomePageFood());
-                                });
-                              },
-                              child: Text(
-                                "Hit me",
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  isDataLoading
+                      ? CircularProgressIndicator()
+                      : totalSearchResultCount(
+                          appFoodRecipeList, foodSearchTextController.text),
                   Container(
                     child: isDataLoading
                         ? CircularProgressIndicator()
@@ -237,6 +149,19 @@ class _FoodRecipeHomeState extends State<FoodRecipeHome> {
       ),
     );
   }
+}
+
+Widget totalSearchResultCount(passedApiList, queryText) {
+  return Container(
+    child: Text(
+      "${passedApiList.length} result are found",
+      style: TextStyle(
+        fontSize: 25,
+        color: Colors.red,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
 }
 
 Widget recipeListData(passedApiList) {
@@ -288,7 +213,6 @@ Widget recipeListData(passedApiList) {
                   ),
                   child: Text(
                     passedApiList[index].appLabel,
-                    // passedApiList[index].appSourceUrl,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -333,7 +257,7 @@ Widget recipeListData(passedApiList) {
                 left: 5,
                 top: 5,
                 height: 50,
-                width: 125,
+                width: 130,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -377,31 +301,22 @@ Widget recipeCategory(passedCatList) {
     itemBuilder: (context, index) {
       return Container(
         child: InkWell(
-          onTap: () {
-            print(passedCatList[index]["value"]);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    SearchFoodRecipe(passedCatList[index]["value"]),
-              ),
-            );
-          },
+          onTap: () {},
           child: Card(
-            margin: EdgeInsets.all(15),
+            margin: EdgeInsets.all(20),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(18),
             ),
-            elevation: 10.0,
+            elevation: 0.0,
             child: Stack(
               children: [
                 ClipRRect(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(18.0),
                     child: Image.network(
                       passedCatList[index]["imgUrl"],
                       fit: BoxFit.cover,
-                      width: 250,
-                      height: 200,
+                      width: 200,
+                      height: 250,
                     )),
                 Positioned(
                   left: 0,
@@ -410,15 +325,13 @@ Widget recipeCategory(passedCatList) {
                   top: 0,
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.black26,
-                        borderRadius: BorderRadius.circular(25.0)),
+                    decoration: BoxDecoration(color: Colors.black26),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           passedCatList[index]["heading"],
-                          style: TextStyle(color: Colors.white, fontSize: 25),
+                          style: TextStyle(color: Colors.white, fontSize: 28),
                         ),
                       ],
                     ),
