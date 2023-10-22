@@ -44,15 +44,11 @@ class _RecipeWebViewState extends State<RecipeWebView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.recipeName),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: WebViewWidget(
-          controller: foodRecipeViewController,
+        appBar: AppBar(
+          title: Text(widget.recipeName),
         ),
-      ),
-    );
+        body: WebViewWidget(
+          controller: foodRecipeViewController,
+        ));
   }
 }
