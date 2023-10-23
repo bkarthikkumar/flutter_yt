@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class NewsroomHome extends StatefulWidget {
@@ -22,6 +23,12 @@ class _NewsroomHomeState extends State<NewsroomHome> {
     'Science and Technology',
     'Sports',
     'Travel',
+  ];
+  final List colorsItems = [
+    Colors.blueAccent,
+    Colors.amberAccent,
+    Colors.redAccent,
+    Colors.deepOrange,
   ];
   @override
   Widget build(BuildContext context) {
@@ -91,19 +98,9 @@ class _NewsroomHomeState extends State<NewsroomHome> {
                     ],
                   ),
                 ),
-                Container(
-                  height: 75,
-                  decoration: BoxDecoration(
-                    gradient: RadialGradient(
-                      stops: [0.1, 0.9],
-                      colors: [
-                        Colors.white,
-                        Colors.yellow,
-                      ],
-                    ),
-                  ),
-                  child: newsCatsSection(newsCats),
-                )
+                newsCatsMainSection(newsCats),
+                // slider code
+                homePageSlider(colorsItems),
               ],
             ),
           ),
@@ -113,15 +110,31 @@ class _NewsroomHomeState extends State<NewsroomHome> {
   }
 }
 
-Widget newsCatsSection(newsCategories) {
+Widget newsCatsMainSection(newsCategories) {
+  return Container(
+    height: 75,
+    decoration: BoxDecoration(
+      gradient: RadialGradient(
+        stops: [0.1, 0.9],
+        colors: [
+          Colors.white,
+          Colors.yellow,
+        ],
+      ),
+    ),
+    child: newsCatsChildSection(newsCategories),
+  );
+}
+
+Widget newsCatsChildSection(newsChild) {
   return ListView.builder(
     shrinkWrap: true,
     scrollDirection: Axis.horizontal,
-    itemCount: newsCategories.length,
+    itemCount: newsChild.length,
     itemBuilder: ((context, index) {
       return InkWell(
         onTap: () {
-          print(newsCategories[index]);
+          print(newsChild[index]);
         },
         child: Container(
           height: 40,
@@ -137,7 +150,7 @@ Widget newsCatsSection(newsCategories) {
           ),
           child: Center(
             child: Text(
-              newsCategories[index],
+              newsChild[index],
               style: TextStyle(
                 fontFamily: 'heading-text',
                 fontSize: 25,
@@ -149,5 +162,47 @@ Widget newsCatsSection(newsCategories) {
         ),
       );
     }),
+  );
+}
+
+Widget homePageSlider(colorsItems) {
+  return Container(
+    margin: EdgeInsets.symmetric(
+      horizontal: 20,
+      vertical: 20,
+    ),
+    child: InkWell(
+      onTap: () {},
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: 400,
+          aspectRatio: 16 / 9,
+          viewportFraction: 0.8,
+          initialPage: 0,
+          enableInfiniteScroll: true,
+          reverse: false,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 3),
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enlargeCenterPage: true,
+          enlargeFactor: 0.3,
+          scrollDirection: Axis.horizontal,
+        ),
+        // items: [1, 2, 3, 4, 5].map((i) {
+        items: colorsItems.map<Widget>((i) {
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                // margin: EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(color: i),
+                child: Text("Text $i"),
+              );
+            },
+          );
+        }).toList(),
+      ),
+    ),
   );
 }
