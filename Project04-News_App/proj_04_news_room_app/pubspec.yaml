@@ -38,6 +38,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   webview_flutter: ^4.4.1
   carousel_slider: ^4.2.1
+  country_flags: ^2.0.0
 
 dev_dependencies:
   flutter_test:

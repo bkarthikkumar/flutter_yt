@@ -1,21 +1,26 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:country_flags/country_flags.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:proj_04_news_room_app/AppScreens/cat_searchpage_news.dart';
-import 'package:proj_04_news_room_app/NewsModel/news_model.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class NewsroomHome extends StatefulWidget {
-  const NewsroomHome({super.key});
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:country_flags/country_flags.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart';
+import 'package:proj_04_news_room_app/NewsModel/news_model.dart';
+
+class CategorySearchNews extends StatefulWidget {
+  // const CategorySearchNews({super.key});
+  String cateQuery;
+  CategorySearchNews({required this.cateQuery});
+  getName(name) {
+    print(name);
+  }
 
   @override
-  State<NewsroomHome> createState() => _NewsroomHomeState();
+  State<CategorySearchNews> createState() => _CategorySearchNewsState();
 }
 
-class _NewsroomHomeState extends State<NewsroomHome> {
+class _CategorySearchNewsState extends State<CategorySearchNews> {
   TextEditingController newsRoomController = TextEditingController();
 
   String appKey = '5721568e097a4476b118ba7da73f06ce';
@@ -97,12 +102,9 @@ class _NewsroomHomeState extends State<NewsroomHome> {
   ];
 
   bool isDataLoading = true;
-  getNewsData() async {
-    final _random = new Random();
-    var countryName = countriesName[_random.nextInt(countriesName.length)];
-    // var randCats = newsCats[_random.nextInt(newsCats.length)].toLowerCase();
+  getNewsData(searchQuery) async {
     newsAppUrl =
-        'https://newsapi.org/v2/top-headlines?country=$countryName&apiKey=$appKey';
+        'https://newsapi.org/v2/everything?q=$searchQuery&apiKey=$appKey';
     print(newsAppUrl);
     Response newsDataresponse = await get(Uri.parse(newsAppUrl));
     Map completeData = jsonDecode(newsDataresponse.body);
@@ -159,7 +161,7 @@ class _NewsroomHomeState extends State<NewsroomHome> {
   @override
   void initState() {
     super.initState();
-    getNewsData();
+    getNewsData(widget.cateQuery);
   }
 
   @override
@@ -223,6 +225,7 @@ class _NewsroomHomeState extends State<NewsroomHome> {
                           controller: newsRoomController,
                           textInputAction: TextInputAction.search,
                           onSubmitted: (value) {
+                            print(value);
                             Navigator.push(
                               context,
                               (MaterialPageRoute(
@@ -242,12 +245,12 @@ class _NewsroomHomeState extends State<NewsroomHome> {
                   ),
                 ),
                 newsCatsMainSection(newsCats),
-                // countriesSection(countriesList: countriesName),
+                countriesSection(countriesList: countriesName),
                 // slider code
                 // homePageSlider(newsArticles),
                 rowSeprator(),
 
-                appHeadings(appheadingText: "Latest News around the Globe"),
+                appHeadings(appheadingText: widget.cateQuery),
                 isDataLoading ? dataLoader() : newsItemsList(newsArticles),
               ],
             ),
@@ -261,7 +264,7 @@ class _NewsroomHomeState extends State<NewsroomHome> {
 Widget dataLoader() {
   return SpinKitChasingDots(
     color: Colors.blueAccent,
-    size: 100.0,
+    size: 150.0,
   );
 }
 
@@ -269,7 +272,7 @@ Widget appHeadings({appheadingText}) {
   return Container(
     child: Center(
       child: Text(
-        appheadingText,
+        appheadingText.toString().toUpperCase(),
         style: TextStyle(
           fontSize: 25,
           fontWeight: FontWeight.w700,
@@ -388,7 +391,7 @@ Widget newsCatsChildSection(newsChild) {
       return InkWell(
         onTap: () {
           print(newsChild[index].toString().toLowerCase());
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             (MaterialPageRoute(
               builder: (context) => CategorySearchNews(
